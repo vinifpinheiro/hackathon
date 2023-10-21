@@ -10,11 +10,32 @@ datasource db {
     url      = env("DATABASE_URL")
 }
 
-model Post {
-    id        Int      @id @default(autoincrement())
-    name      String
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
+model User {
+  id Int @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  doc String
+  name String
+  phone String
+  email String
+  events Event[] 
 
-    @@index([name])
+  @@map("usuário")
+}
+
+
+model Event {
+  id Int @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  nm_event String
+  nm_user User @relation(fields: [nm_user_id], references: [id])
+  nm_user_id Int
+  date DateTime
+  city String
+  state String
+  address String
+  phone String
+  description String
+  type String
+  
+  @@map("evento")
 }
