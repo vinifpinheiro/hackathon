@@ -185,7 +185,7 @@ function EventoForm() {
         </div>
         {/* Repita o bloco acima para os outros campos do formulário */}
         {/* Endereço, Telefone, Descrição, Tipo, etc. */}
-        <Button className="w-full" variant="outline">
+        <Button className="w-full hover:bg-primary" variant="outline">
           Enviar
         </Button>
       </form>
