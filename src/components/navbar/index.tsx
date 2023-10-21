@@ -12,7 +12,7 @@ const user = {
 };
 const navigation = [
   { name: "Home", href: "/", current: true },
-  { name: "Cria eventos", href: "/new-event", current: false },
+  { name: "Criar eventos", href: "/new-event", current: false },
   // { name: "Projects", href: "#", current: false },
   // { name: "Calendar", href: "#", current: false },
 ];
@@ -41,17 +41,15 @@ export default function Navbar() {
                   <div className="flex">
                     <div className="flex flex-shrink-0 items-center">
                       <img
-                        className="block h-8 w-auto lg:hidden"
-                        src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600"
-                        alt="Your Company"
+                        className="block h-8 w-auto lg:hidden "
+                        src="/logo/logo.png"
                       />
                       <img
-                        className="hidden h-8 w-auto lg:block"
-                        src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600"
-                        alt="Your Company"
+                        className="hidden h-8 w-auto lg:block scale-150"
+                        src="/logo/logo.png"
                       />
                     </div>
-                    <div className="hidden sm:-my-px sm:ml-6 sm:flex sm:space-x-8">
+                    <div className="hidden sm:-my-px sm:ml-20 sm:flex sm:space-x-8">
                       {navigation.map((item) => (
                         <a
                           key={item.name}
