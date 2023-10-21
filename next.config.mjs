@@ -17,6 +17,11 @@ const config = {
     locales: ["en"],
     defaultLocale: "en",
   },
+
+  // Add images domain configuration
+  images: {
+    domains: ["api.unsplash.com", "images.unsplash.com"],
+  },
 };
 
 export default config;
