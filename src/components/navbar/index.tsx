@@ -28,6 +28,7 @@ export default function Navbar() {
   const verifyCurrent = (href: string) => {
     return pathname === href;
   }
+   
   
 
   return (

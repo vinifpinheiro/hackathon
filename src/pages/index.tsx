@@ -8,8 +8,9 @@ import {
   CardHeader,
   CardTitle,
 } from "../components/reusable/card";
-
-
+import CardHome from "../components/Card";
+import Dashboard from "../components/Dashboard";
+import EventoForm from "../components/Form";
 
 
 export default function Home() {
@@ -22,18 +23,7 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main className="h-screen w-screen">
-        <Card className="max-w-[400px] ">
-          <CardHeader>
-            <CardTitle>Card Title</CardTitle>
-            <CardDescription>Card Description</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <p>Card Content</p>
-          </CardContent>
-          <CardFooter>
-            <p>Card Footer</p>
-          </CardFooter>
-        </Card>
+        <EventoForm/>
       </main>
     </>
   );
