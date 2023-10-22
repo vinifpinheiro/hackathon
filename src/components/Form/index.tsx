@@ -16,6 +16,7 @@ import dayjs from "dayjs";
 
 function EventoForm() {
   const { user } = useClerk();
+  const [success, setSuccess] = useState(false);
   const { selected } = useStore();
   const [formData, setFormData] = useState({
     nm_event: "",
@@ -70,7 +71,17 @@ function EventoForm() {
     <div>
       <div className="h-auto w-screen">
         <Image
-          src="https://images.unsplash.com/photo-1574681357916-9d4464642696?auto=format&fit=crop&q=80&w=2940&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+          src={
+            formData.type === "food"
+              ? "https://images.unsplash.com/photo-1579705745811-a32bef7856a3?auto=format&fit=crop&q=80&w=2940&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+              : formData.type === "clothes"
+              ? "https://images.unsplash.com/photo-1574681357916-9d4464642696?auto=format&fit=crop&q=80&w=2940&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+              : formData.type === "dinner"
+              ? "https://images.unsplash.com/photo-1603208614636-aa308b918a32?auto=format&fit=crop&q=80&w=2944&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+              : formData.type === "toys"
+              ? "https://images.unsplash.com/photo-1566576912321-d58ddd7a6088?auto=format&fit=crop&q=80&w=2940&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+              : "https://images.unsplash.com/photo-1582213782179-e0d53f98f2ca?auto=format&fit=crop&q=80&w=2940&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+          }
           alt=""
           width={1920}
           height={1080}
@@ -214,9 +225,23 @@ function EventoForm() {
             variant="outline"
             size={"lg"}
             type="submit"
+            onClick={() => {
+              setTimeout(() => {
+                setSuccess(true);
+              }, 3000);
+            }}
           >
             Enviar
           </Button>
+          {success && (
+            <div className="flex justify-center">
+              <Button variant={"outline"} className="mt-10 p-8">
+                <p className="p-5 text-2xl text-emerald-800 dark:text-emerald-300">
+                  Evento criado com sucesso! 😉
+                </p>
+              </Button>
+            </div>
+          )}
         </form>
       </div>
     </div>

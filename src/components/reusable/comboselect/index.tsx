@@ -133,7 +133,7 @@ export function ComboboxDemo() {
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
-      <PopoverTrigger asChild className="bg-background border">
+      <PopoverTrigger asChild className="border bg-background">
         <Button
           variant="outline"
           role="combobox"

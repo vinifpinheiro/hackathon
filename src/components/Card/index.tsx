@@ -8,6 +8,7 @@ import {
 } from "../reusable/card";
 import Image from "next/image";
 import dayjs from "dayjs";
+import { Badge } from "../reusable/badge";
 
 export interface CardHomeProps {
   nm_event: string;
@@ -47,7 +48,19 @@ export default function CardHome(props: CardHomeProps) {
           <p>{dayjs(props.date).format("D MMMM YYYY hh:mm")}</p>
           <p>{props.hour}</p>
           <p>{props.hour}</p>
-          <p>{props.type}</p>
+          <Badge variant={"default"} className="relative top-6">
+            <p>
+              {props.type === "food"
+                ? "Alimentos"
+                : props.type === "clothes"
+                ? "Roupas"
+                : props.type === "dinner"
+                ? "Jantar"
+                : props.type === "toys"
+                ? "Brinquedos"
+                : "Outros"}
+            </p>
+          </Badge>
         </CardContent>
       </div>
     </Card>
