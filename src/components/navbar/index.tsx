@@ -4,6 +4,7 @@ import { Bars3Icon, BellIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import { cx } from "class-variance-authority";
 import { useRouter } from "next/router";
 import { ThemeSwitcher } from "../theme-switcher";
+import { useTheme } from "next-themes";
 
 const user = {
   name: "Tom Cook",
@@ -30,10 +31,13 @@ export default function Navbar() {
     return pathname === href;
   };
 
+  const { resolvedTheme } = useTheme();
+
+  const isDarkMode = resolvedTheme === "dark";
+
   return (
     <>
       <div className="min-h-full">
-        
         <Disclosure as="nav" className="border-b border-border bg-background">
           {({ open }) => (
             <>
@@ -41,14 +45,17 @@ export default function Navbar() {
                 <div className="flex h-16 justify-between">
                   <div className="flex">
                     <div className="flex flex-shrink-0 items-center">
-                      <img
-                        className="block h-8 w-auto lg:hidden "
-                        src="/logo/logo.png"
-                      />
-                      <img
-                        className="hidden h-8 w-auto scale-150 lg:block"
-                        src="/logo/logo.png"
-                      />
+                      {isDarkMode ? (
+                        <img
+                          className="hidden h-8 w-auto scale-150 lg:block"
+                          src="/logo/logo-dark.png"
+                        />
+                      ) : (
+                        <img
+                          className="hidden h-8 w-auto scale-150 lg:block"
+                          src="/logo/logo.png"
+                        />
+                      )}
                     </div>
                     <div className="hidden sm:-my-px sm:ml-20 sm:flex sm:space-x-8">
                       {navigation.map((item) => (
@@ -70,7 +77,7 @@ export default function Navbar() {
                   </div>
                   <div className="flex items-center"></div>
                   <div className="hidden sm:ml-6 sm:flex sm:items-center">
-                    <ThemeSwitcher/>
+                    <ThemeSwitcher />
                     <Menu as="div" className="relative ml-3">
                       <div>
                         <Menu.Button className="relative flex max-w-xs items-center rounded-full bg-background text-sm focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2">
