@@ -3,7 +3,6 @@ import { Disclosure, Menu, Transition } from "@headlessui/react";
 import { Bars3Icon, BellIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import { cx } from "class-variance-authority";
 import { useRouter } from "next/router";
-import { ThemeProvider } from "../reusable/theme-provider";
 import { ThemeSwitcher } from "../theme-switcher";
 
 const user = {
@@ -25,12 +24,12 @@ const userNavigation = [
 ];
 
 export default function Navbar() {
-  const {pathname} = useRouter();
+  const { pathname } = useRouter();
 
   const verifyCurrent = (href: string) => {
     return pathname === href;
-  }
-   
+  };
+
   return (
     <>
       <div className="min-h-full">
@@ -69,6 +68,7 @@ export default function Navbar() {
                       ))}
                     </div>
                   </div>
+                  <div className="flex items-center"></div>
                   <div className="hidden sm:ml-6 sm:flex sm:items-center">
                     <ThemeSwitcher/>
                     <Menu as="div" className="relative ml-3">
@@ -194,15 +194,6 @@ export default function Navbar() {
             </>
           )}
         </Disclosure>
-
-        <div className="py-10">
-          <header></header>
-          <main>
-            <div className="mx-auto max-w-7xl sm:px-6 lg:px-8">
-              {/* Your content */}
-            </div>
-          </main>
-        </div>
       </div>
     </>
   );

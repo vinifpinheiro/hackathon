@@ -133,7 +133,7 @@ export function ComboboxDemo() {
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
-      <PopoverTrigger asChild>
+      <PopoverTrigger asChild className="bg-background border">
         <Button
           variant="outline"
           role="combobox"
@@ -143,13 +143,13 @@ export function ComboboxDemo() {
           {selected
             ? frameworks.find((framework) => framework.value === selected)
                 ?.label
-            : "Select framework..."}
+            : "Selecione um estado"}
           <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
         </Button>
       </PopoverTrigger>
       <PopoverContent className="h-[200px] w-[200px] p-0" side="">
         <Command>
-          <CommandInput placeholder="Search framework..." />
+          <CommandInput placeholder="Pesquise um estado" />
           <CommandEmpty>No framework found.</CommandEmpty>
           <CommandGroup>
             {frameworks.map((framework) => (

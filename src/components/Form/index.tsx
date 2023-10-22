@@ -4,183 +4,221 @@ import { Input } from "../reusable/input";
 import { ComboboxDemo } from "../reusable/comboselect";
 import useStore from "../reusable/comboselect/zustand";
 import { Select } from "../reusable/selectstate";
-import { SelectArrow } from "@radix-ui/react-select";
-  import {
-    SelectContent,
-    SelectItem,
-    SelectTrigger,
-    SelectValue,
-  } from "../reusable/selectstate";
-  import { Check, ChevronDown } from "lucide-react";
+import {
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "../reusable/selectstate";
+import { useClerk } from "@clerk/nextjs";
+import Image from "next/image";
+import dayjs from "dayjs";
 
 function EventoForm() {
-  const { selected, setSelected } = useStore();
+  const { user } = useClerk();
+  const { selected } = useStore();
   const [formData, setFormData] = useState({
-    nomeEvento: "",
-    nomeOrganizador: "",
-    dataHora: "",
-    estado: selected,
-    cidade: "",
-    endereco: "",
-    telefone: "",
-    descricao: "",
-    tipo: "",
+    nm_event: "",
+    date: "",
+    city: "",
+    state: "",
+    address: "",
+    phone: "",
+    description: "",
+    type: "",
   });
-
-
 
   const handleInputChange = (
     e: ChangeEvent<HTMLInputElement | HTMLSelectElement>,
   ) => {
     const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
+    setFormData({
+      ...formData,
+      [name]: value,
+      state: selected,
+      date: formData.date.toString(),
+    });
   };
 
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
-    // Aqui você pode usar formData para enviar os dados do formulário.
-    console.log(formData);
-    console.log(selected);
+
+    // Criar um objeto JSON com os dados do formulário
+    const formDataJSON = JSON.stringify(formData);
+    console.log(formDataJSON);
+
+    fetch(`/api/post-events/`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+
+      body: formDataJSON,
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        console.log("Sucesso:", data);
+      })
+      .catch((error) => {
+        console.error("Erro:", error);
+      });
+
+    // Aqui, você pode enviar o objeto JSON para um servidor ou realizar outras ações.
   };
 
   return (
-    <div className="mx-auto max-w-5xl rounded-md bg-white p-6 shadow-md">
-      <h2 className="mb-4 text-xl font-semibold">Formulário do Evento</h2>
-      <form onSubmit={handleSubmit}>
-        <div className="mb-4">
-          <label
-            htmlFor="nomeEvento"
-            className="block text-sm font-medium text-gray-600"
+    <div>
+      <div className="h-auto w-screen">
+        <Image
+          src="https://images.unsplash.com/photo-1574681357916-9d4464642696?auto=format&fit=crop&q=80&w=2940&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+          alt=""
+          width={1920}
+          height={1080}
+          className="max-h-[300px] w-full object-cover"
+        />
+      </div>
+      <div className="relative bottom-20 mx-auto max-w-5xl rounded-md border bg-background p-6">
+        <h2 className="mb-4 text-2xl font-semibold">Formulário do Evento</h2>
+        <form onSubmit={handleSubmit}>
+          <div className="mb-4 rounded-lg border bg-secondary p-4">
+            <label
+              htmlFor="nm_event"
+              className="mb-2 block text-sm font-medium text-muted-foreground"
+            >
+              Nome do evento
+            </label>
+            <Input
+              name="nm_event"
+              value={formData.nm_event}
+              onChange={handleInputChange}
+            />
+          </div>
+          <div className="mb-4 rounded-lg border bg-secondary p-4">
+            <label
+              htmlFor="type"
+              className="mb-2 block text-sm font-medium text-muted-foreground"
+            >
+              Tipo:
+            </label>
+            <select
+              name="type"
+              onChange={handleInputChange}
+              className="w-full rounded-md border border-border bg-background p-2 text-muted-foreground"
+            >
+              <option value="">Selecione um tipo</option>
+              <option value="food">Alimentos</option>
+              <option value="clothes">Roupas</option>
+              <option value="dinner">Jantar</option>
+              <option value="toys">Brinquedos</option>
+              <option value="others">Outros</option>
+            </select>
+          </div>
+          <div className="mb-4 rounded-lg border bg-secondary p-4">
+            <label
+              htmlFor="nomeEvento"
+              className="mb-2 block  text-sm font-medium text-muted-foreground"
+            >
+              Nome do Organizador
+            </label>
+            <Input
+              disabled
+              name="nm_user_id"
+              onChange={handleInputChange}
+              value={user?.fullName!}
+            />
+          </div>
+          <div className="mb-4 rounded-lg border bg-secondary p-4">
+            <label
+              htmlFor="dataCriacao"
+              className="mb-2 block  text-sm font-medium text-muted-foreground"
+            >
+              Data e Hora
+            </label>
+            <Input
+              type="date"
+              name="date"
+              onChange={handleInputChange}
+              value={formData.date}
+            />
+            <Input
+              className="mt-2"
+              type="time"
+              name="hour"
+              onChange={handleInputChange}
+            />
+          </div>
+          <div className="mb-4 rounded-lg border bg-secondary p-4">
+            <label
+              htmlFor="estado"
+              className="mb-2 block  text-sm font-medium text-muted-foreground"
+            >
+              Estado
+            </label>
+            <ComboboxDemo />
+          </div>
+          <div className="mb-4 rounded-lg border bg-secondary p-4">
+            <label
+              htmlFor="cidade"
+              className="mb-2 block  text-sm font-medium text-muted-foreground"
+            >
+              Cidade
+            </label>
+            <Input
+              name="city"
+              value={formData.city}
+              onChange={handleInputChange}
+            />
+          </div>
+          <div className="mb-4 rounded-lg border bg-secondary p-4">
+            <label
+              htmlFor="dataCriacao"
+              className="mb-2 block  text-sm font-medium text-muted-foreground"
+            >
+              Endereço
+            </label>
+            <Input
+              value={formData.address}
+              name="address"
+              onChange={handleInputChange}
+            />
+          </div>
+          <div className="mb-4 rounded-lg border bg-secondary p-4">
+            <label
+              htmlFor="dataCriacao"
+              className="mb-2 block  text-sm font-medium text-muted-foreground"
+            >
+              Telefone
+            </label>
+            <Input
+              value={formData.phone}
+              type="tel"
+              name="phone"
+              onChange={handleInputChange}
+            />
+          </div>
+          <div className="mb-4 rounded-lg border bg-secondary p-4">
+            <label
+              htmlFor="dataCriacao"
+              className="mb-2 block  text-sm font-medium text-muted-foreground"
+            >
+              Descrição
+            </label>
+            <Input
+              value={formData.description}
+              name="description"
+              onChange={handleInputChange}
+            />
+          </div>
+          <Button
+            className="w-full"
+            variant="outline"
+            size={"lg"}
+            type="submit"
           >
-            Nome do evento
-          </label>
-          <Input
-            type="text"
-            name="nomeEvento"
-            value={formData.nomeEvento}
-            onChange={handleInputChange}
-          />
-        </div>
-        <label
-          htmlFor="nomeEvento"
-          className="block text-sm font-medium text-gray-600"
-        >
-          Tipo:
-        </label>
-        <Select>
-          <SelectTrigger className="mb-4 w-[180px]">
-            <SelectValue placeholder="Tipo do evento" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="light">Arrecadação de Alimentos</SelectItem>
-            <SelectItem value="dark">Doação de Roupas</SelectItem>
-            <SelectItem value="system">Jantar de Caridade</SelectItem>
-            <SelectItem value="system">Doação Brinquedos</SelectItem>
-          </SelectContent>
-        </Select>
-        <div className="mb-4">
-          <label
-            htmlFor="nomeOrganizador"
-            className="block text-sm font-medium text-gray-600"
-          >
-            Nome do Organizador
-          </label>
-          <Input
-            type="text"
-            name="nomeOrganizador"
-            value={formData.nomeOrganizador}
-            onChange={handleInputChange}
-          />
-        </div>
-        <div className="mb-4">
-          <label
-            htmlFor="dataHora"
-            className="block text-sm font-medium text-gray-600"
-          >
-            Data e Hora
-          </label>
-          <Input
-            type="date"
-            name="dataHora"
-            value={formData.dataHora}
-            onChange={handleInputChange}
-          />
-        </div>
-        <div className="mb-4">
-          <label
-            htmlFor="estado"
-            className="block text-sm font-medium text-gray-600"
-          >
-            Estado
-          </label>
-          <ComboboxDemo />
-        </div>
-        <div className="mb-4">
-          <label
-            htmlFor="cidade"
-            className="block text-sm font-medium text-gray-600"
-          >
-            Cidade
-          </label>
-          <Input
-            type="text"
-            name="cidade"
-            value={formData.cidade}
-            onChange={handleInputChange}
-          />
-        </div>
-        <div className="mb-4">
-          <label
-            htmlFor="endereco"
-            className="block text-sm font-medium text-gray-600"
-          >
-            Endereço
-          </label>
-          <Input
-            type="text"
-            name="endereco"
-            value={formData.endereco}
-            onChange={handleInputChange}
-          />
-        </div>
-        <div className="mb-4">
-          <label
-            htmlFor="telefone"
-            className="block text-sm font-medium text-gray-600"
-          >
-            Telefone
-          </label>
-          <Input
-            type="text"
-            name="telefone"
-            value={formData.telefone}
-            onChange={handleInputChange}
-          />
-        </div>
-        <div className="mb-4">
-          <label
-            htmlFor="descricao"
-            className="block text-sm font-medium text-gray-600"
-          >
-            Descrição
-          </label>
-          <Input
-            type="text"
-            name="descricao"
-            value={formData.descricao}
-            onChange={handleInputChange}
-           
-          />
-        </div>
-        {/* Adicione os campos restantes do formulário aqui */}
-        <Button
-          className="w-full hover:bg-primary"
-          variant="outline"
-          type="submit"
-        >
-          Enviar
-        </Button>
-      </form>
+            Enviar
+          </Button>
+        </form>
+      </div>
     </div>
   );
 }

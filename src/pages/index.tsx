@@ -1,36 +1,36 @@
 import Head from "next/head";
-import CardHome from "../components/Card";
+import { useEffect, useState } from "react";
 import Dashboard from "../components/Dashboard";
-import EventoForm from "../components/Form";
-import { View, X } from "lucide-react";
-import Viewimg from "../components/Viewimg";
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger,
-} from "../components/reusable/alert";
-import { useState } from "react";
-import { Button } from "../components/reusable/button";
-import EventDetails from "../components/Infoevents";
-import { Card } from "../components/reusable/card";
-import { Form } from "react-hook-form";
+import CardHome, { CardHomeProps } from "../components/Card";
+import { Input } from "../components/reusable/input";
 
-function YourComponent() {
-  const [isOpen, setIsOpen] = useState(false);
+export default function Home() {
+  const [cards, setCards] = useState([]);
+  const [searchText, setSearchText] = useState("");
+  const [filteredCards, setFilteredCards] = useState([]);
 
-  const openDialog = () => {
-    setIsOpen(true);
+  useEffect(() => {
+    fetch("/api/get-events")
+      .then((response) => response.json())
+      .then((data) => {
+        setCards(data);
+        console.log("Sucesso:", data);
+      })
+      .catch((error) => {
+        console.error("Erro:", error);
+      });
+  }, []);
+
+  const filterCards = () => {
+    const filtered = cards.filter((card: CardHomeProps) =>
+      card.nm_event.toLowerCase().includes(searchText.toLowerCase()),
+    );
+    setFilteredCards(filtered);
   };
 
-  const closeDialog = () => {
-    setIsOpen(false);
-  };
+  useEffect(() => {
+    filterCards();
+  }, [searchText, cards]);
 
   return (
     <>
@@ -40,10 +40,20 @@ function YourComponent() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main>
-        <CardHome />
+        <Dashboard
+          searchInput={
+            <Input
+              placeholder="Pesquisar..."
+              value={searchText}
+              onChange={(e) => setSearchText(e.target.value)}
+            />
+          }
+        >
+          {filteredCards.map((card: CardHomeProps) => (
+            <CardHome key={card.nm_event} {...card} />
+          ))}
+        </Dashboard>
       </main>
     </>
   );
 }
-
-export default YourComponent;

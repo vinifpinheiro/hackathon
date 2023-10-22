@@ -14,6 +14,8 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
           name: requestData.name,
           phone: requestData.phone,
           email: requestData.email,
+          id_clerk: requestData.id_clerk,
+          events: {},
         },
       });
 
@@ -29,4 +31,3 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     res.status(405).end(); // Retorna um código 405 se a solicitação não for um POST
   }
 };
-

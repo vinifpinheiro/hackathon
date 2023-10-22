@@ -15,7 +15,7 @@ const MyApp: AppType = ({ Component, pageProps }) => {
         disableTransitionOnChange
       >
         <Navbar />
-        <Component {...pageProps} />;
+        <Component {...pageProps} />
       </ThemeProvider>
     </ClerkLayout>
   );

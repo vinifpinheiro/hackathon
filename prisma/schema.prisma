@@ -11,12 +11,13 @@ datasource db {
 }
 
 model User {
-  id String @id @default(uuid())
+  id Int @id @default(autoincrement())
   createdAt DateTime @default(now())
   doc String
   name String
   phone String
   email String
+  id_clerk String @unique
   events Event[] 
 
   @@map("usuário")
@@ -24,10 +25,11 @@ model User {
 
 
 model Event {
-  id String @id @default(uuid())
+  id Int @id @default(autoincrement())
   createdAt DateTime @default(now())
   nm_event String
-  nm_user User @relation(fields: [id], references: [id])
+  nm_user User @relation(fields: [nm_user_id], references: [id_clerk])
+  nm_user_id String
   date DateTime
   city String
   state String
@@ -35,7 +37,5 @@ model Event {
   phone String
   description String
   type String
-  image_url String
-  
   @@map("evento")
 }

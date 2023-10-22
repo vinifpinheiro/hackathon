@@ -7,7 +7,7 @@ export default (req: NextApiRequest, res: NextApiResponse) => {
     db.user
       .findUnique({
         where: {
-          id: Number(id),
+          id_clerk: id?.toString(),
         },
       })
       .then((user) => {
