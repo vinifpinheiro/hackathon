@@ -3,6 +3,8 @@ import { Disclosure, Menu, Transition } from "@headlessui/react";
 import { Bars3Icon, BellIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import { cx } from "class-variance-authority";
 import { useRouter } from "next/router";
+import { ThemeProvider } from "../reusable/theme-provider";
+import { ThemeSwitcher } from "../theme-switcher";
 
 const user = {
   name: "Tom Cook",
@@ -29,11 +31,10 @@ export default function Navbar() {
     return pathname === href;
   }
    
-  
-
   return (
     <>
       <div className="min-h-full">
+        
         <Disclosure as="nav" className="border-b border-border bg-background">
           {({ open }) => (
             <>
@@ -46,7 +47,7 @@ export default function Navbar() {
                         src="/logo/logo.png"
                       />
                       <img
-                        className="hidden h-8 w-auto lg:block scale-150"
+                        className="hidden h-8 w-auto scale-150 lg:block"
                         src="/logo/logo.png"
                       />
                     </div>
@@ -69,7 +70,7 @@ export default function Navbar() {
                     </div>
                   </div>
                   <div className="hidden sm:ml-6 sm:flex sm:items-center">
-                    {/* Profile dropdown */}
+                    <ThemeSwitcher/>
                     <Menu as="div" className="relative ml-3">
                       <div>
                         <Menu.Button className="relative flex max-w-xs items-center rounded-full bg-background text-sm focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2">

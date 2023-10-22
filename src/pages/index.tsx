@@ -19,6 +19,7 @@ import { useState } from "react";
 import { Button } from "../components/reusable/button";
 import EventDetails from "../components/Infoevents";
 import { Card } from "../components/reusable/card";
+import { Form } from "react-hook-form";
 
 function YourComponent() {
   const [isOpen, setIsOpen] = useState(false);
@@ -39,25 +40,7 @@ function YourComponent() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main>
-        <button onClick={openDialog}>Open</button>
-        <AlertDialog open={isOpen} onOpenChange={closeDialog}>
-          <AlertDialogContent className="relative  mt-72 max-w-[1100px]">
-            <Button
-              className="absolute right-2 top-2"
-              variant="ghost"
-              onClick={closeDialog}
-            >
-              <X />
-            </Button>
-            <div>
-              <Card />
-              <h1 className="flex justify-center text-5xl">
-                Arrecadação de alimentos
-              </h1>
-            </div>
-            <EventDetails />
-          </AlertDialogContent>
-        </AlertDialog>
+        <CardHome />
       </main>
     </>
   );

@@ -1,6 +1,7 @@
 import Head from "next/head";
 import EventoForm from "../components/Form";
 import { useEffect } from "react";
+import { Card } from "../components/reusable/card";
 
 
 function YourComponent() {
@@ -16,7 +17,7 @@ useEffect(() => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main>
-        <EventoForm/>
+        <EventoForm />
       </main>
     </>
   );

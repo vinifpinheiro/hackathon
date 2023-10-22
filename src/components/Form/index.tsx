@@ -1,34 +1,25 @@
-import React, { useState, useEffect, ChangeEvent, FormEvent } from "react";
+import React, { useState, ChangeEvent, FormEvent } from "react";
 import { Button } from "../reusable/button";
 import { Input } from "../reusable/input";
-import { Select } from "@radix-ui/react-select";
-import {
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "../reusable/selectstate";
-
-interface FormData {
-  dataCriacao: string;
-  nomeEvento: string;
-  nomeOrganizador: string;
-  dataHora: string;
-  estado: string;
-  cidade: string;
-  endereco: string;
-  telefone: string;
-  descricao: string;
-  tipo: string;
-}
+import { ComboboxDemo } from "../reusable/comboselect";
+import useStore from "../reusable/comboselect/zustand";
+import { Select } from "../reusable/selectstate";
+import { SelectArrow } from "@radix-ui/react-select";
+  import {
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+  } from "../reusable/selectstate";
+  import { Check, ChevronDown } from "lucide-react";
 
 function EventoForm() {
-  const [formData, setFormData] = useState<FormData>({
-    dataCriacao: "",
+  const { selected, setSelected } = useStore();
+  const [formData, setFormData] = useState({
     nomeEvento: "",
     nomeOrganizador: "",
     dataHora: "",
-    estado: "",
+    estado: selected,
     cidade: "",
     endereco: "",
     telefone: "",
@@ -36,62 +27,21 @@ function EventoForm() {
     tipo: "",
   });
 
-  const [estados, setEstados] = useState([]);
-  const [cidades, setCidades] = useState([]);
-  const [estadoSelecionado, setEstadoSelecionado] = useState("");
 
-  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+
+  const handleInputChange = (
+    e: ChangeEvent<HTMLInputElement | HTMLSelectElement>,
+  ) => {
     const { name, value } = e.target;
-    setFormData({
-      ...formData,
-      [name]: value,
-    });
-
+    setFormData({ ...formData, [name]: value });
   };
 
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
-
-    // Criar um objeto JSON com os dados do formulário
-    const formDataJSON = JSON.stringify(formData);
-
-    // Log o objeto JSON no console
-    console.log(formDataJSON);
-
-
-    // Aqui, você pode enviar o objeto JSON para um servidor ou realizar outras ações.
+    // Aqui você pode usar formData para enviar os dados do formulário.
+    console.log(formData);
+    console.log(selected);
   };
-
-  useEffect(() => {
-    // Fazer uma chamada à API do IBGE para buscar a lista de estados
-    fetch("https://servicodados.ibge.gov.br/api/v1/localidades/estados")
-      .then((response) => response.json())
-      .then((data) => {
-        setEstados(data);
-      })
-      .catch((error) => {
-        console.error("Erro ao carregar estados:", error);
-      });
-  }, []);
-
-  useEffect(() => {
-    if (estadoSelecionado) {
-      // Fazer uma chamada à API do IBGE para buscar as cidades do estado selecionado
-      fetch(
-        `https://servicodados.ibge.gov.br/api/v1/localidades/estados/${estadoSelecionado}/municipios`,
-      )
-        .then((response) => response.json())
-        .then((data) => {
-          setCidades(data);
-        })
-        .catch((error) => {
-          console.error("Erro ao carregar cidades:", error);
-        });
-    } else {
-      // Limpar a lista de cidades quando nenhum estado estiver selecionado
-      setCidades([]);
-    }
-  }, [estadoSelecionado]);
 
   return (
     <div className="mx-auto max-w-5xl rounded-md bg-white p-6 shadow-md">
@@ -99,30 +49,62 @@ function EventoForm() {
       <form onSubmit={handleSubmit}>
         <div className="mb-4">
           <label
-            htmlFor="dataCriacao"
+            htmlFor="nomeEvento"
             className="block text-sm font-medium text-gray-600"
           >
             Nome do evento
           </label>
-          <Input />
+          <Input
+            type="text"
+            name="nomeEvento"
+            value={formData.nomeEvento}
+            onChange={handleInputChange}
+          />
         </div>
+        <label
+          htmlFor="nomeEvento"
+          className="block text-sm font-medium text-gray-600"
+        >
+          Tipo:
+        </label>
+        <Select>
+          <SelectTrigger className="mb-4 w-[180px]">
+            <SelectValue placeholder="Tipo do evento" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="light">Arrecadação de Alimentos</SelectItem>
+            <SelectItem value="dark">Doação de Roupas</SelectItem>
+            <SelectItem value="system">Jantar de Caridade</SelectItem>
+            <SelectItem value="system">Doação Brinquedos</SelectItem>
+          </SelectContent>
+        </Select>
         <div className="mb-4">
           <label
-            htmlFor="nomeEvento"
+            htmlFor="nomeOrganizador"
             className="block text-sm font-medium text-gray-600"
           >
             Nome do Organizador
           </label>
-          <Input />
+          <Input
+            type="text"
+            name="nomeOrganizador"
+            value={formData.nomeOrganizador}
+            onChange={handleInputChange}
+          />
         </div>
         <div className="mb-4">
           <label
-            htmlFor="dataCriacao"
+            htmlFor="dataHora"
             className="block text-sm font-medium text-gray-600"
           >
             Data e Hora
           </label>
-          <Input type="date" />
+          <Input
+            type="date"
+            name="dataHora"
+            value={formData.dataHora}
+            onChange={handleInputChange}
+          />
         </div>
         <div className="mb-4">
           <label
@@ -131,21 +113,7 @@ function EventoForm() {
           >
             Estado
           </label>
-          <Select>
-            <SelectTrigger className="w-[180px]">
-              <SelectValue
-                placeholder="Selecione o estado"
-                onChange={(e) => setEstadoSelecionado(e.target.value)}
-              />
-            </SelectTrigger>
-            <SelectContent>
-              {estados.map((estado) => (
-                <SelectItem key={estado.id} value={estado.sigla}>
-                  {estado.nome}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
+          <ComboboxDemo />
         </div>
         <div className="mb-4">
           <label
@@ -154,38 +122,62 @@ function EventoForm() {
           >
             Cidade
           </label>
-          <Input />
+          <Input
+            type="text"
+            name="cidade"
+            value={formData.cidade}
+            onChange={handleInputChange}
+          />
         </div>
         <div className="mb-4">
           <label
-            htmlFor="dataCriacao"
+            htmlFor="endereco"
             className="block text-sm font-medium text-gray-600"
           >
             Endereço
           </label>
-          <Input />
+          <Input
+            type="text"
+            name="endereco"
+            value={formData.endereco}
+            onChange={handleInputChange}
+          />
         </div>
         <div className="mb-4">
           <label
-            htmlFor="dataCriacao"
+            htmlFor="telefone"
             className="block text-sm font-medium text-gray-600"
           >
             Telefone
           </label>
-          <Input type="number" />
+          <Input
+            type="text"
+            name="telefone"
+            value={formData.telefone}
+            onChange={handleInputChange}
+          />
         </div>
         <div className="mb-4">
           <label
-            htmlFor="dataCriacao"
+            htmlFor="descricao"
             className="block text-sm font-medium text-gray-600"
           >
             Descrição
           </label>
-          <Input />
+          <Input
+            type="text"
+            name="descricao"
+            value={formData.descricao}
+            onChange={handleInputChange}
+           
+          />
         </div>
-        {/* Repita o bloco acima para os outros campos do formulário */}
-        {/* Endereço, Telefone, Descrição, Tipo, etc. */}
-        <Button className="w-full hover:bg-primary" variant="outline">
+        {/* Adicione os campos restantes do formulário aqui */}
+        <Button
+          className="w-full hover:bg-primary"
+          variant="outline"
+          type="submit"
+        >
           Enviar
         </Button>
       </form>
