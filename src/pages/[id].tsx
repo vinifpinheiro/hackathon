@@ -174,7 +174,7 @@ export default function DynamicPage() {
                   </div>
                 </div>
               ))}
-            {!user?.id === event?.nm_user_id && (
+            {!(user?.id === event?.nm_user_id) && (
               <div className="flex justify-center mt-2">
                 <Button
                   size={"lg"}
